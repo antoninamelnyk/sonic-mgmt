@@ -41,10 +41,8 @@ def parse_host_interfaces(hifs):
     """
     parse host interfaces
 
-    Support 3 formats:
-    1. Legacy format (non multi-dut): vlan_index
-    2. new format (multi-dut): dut_index.vlan_index,dut_index.vlan_index
-    3. new format (multi-dut): dut_index.vlan_index@ptf_port_index,dut_index.vlan_index@ptf_port_index
+    old format (non multi-dut): vlan_index
+    new format (multi-dut):     dut_index.vlan_index,dut_index.vlan_index
     """
 
     if isinstance(hifs, int):
@@ -55,8 +53,8 @@ def parse_host_interfaces(hifs):
 
     ret = []
     for hif in hifs.split(','):
-        indices = tuple([int(x) for x in re.split(r'\.|@', hif.strip())])
-        ret.append(indices)   # (dut_index, vlan_index) or (dut_index, vlan_index, ptf_port_index)
+        (dut_index, port_index) = [int(x) for x in hif.split('.')]
+        ret.append((dut_index, port_index))
 
     return ret
 
